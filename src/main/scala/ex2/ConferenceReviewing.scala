@@ -33,10 +33,14 @@ object ConferenceReviewing:
     override def orderedScores(article: Int, question: Question): List[Int] =
       _reviews.collect{ case (a, m) if a == article => m(question)}.sorted
 
-    override def averageFinalScore(article: Int): Double = ???
+    override def averageFinalScore(article: Int): Double =
+      val s = _reviews.collect{ case (a, m) if a == article => m(Final)}
+      val l = s.length
+      s.map(_.toDouble).sum / l
 
-    override def acceptedArticles(): Predef.Set[Int] = ???
-
+    override def acceptedArticles(): Predef.Set[Int] =
+      _reviews.filter((a, _) => averageFinalScore(a) > 5).filter((_, m) => m(Relevance) >= 8).map((a, _) => a).toSet
+    
     override def sortedAcceptedArticles(): List[(Int, Double)] = ???
 
     override def averageWeightedFinalScoreMap(): Predef.Map[Int, Double] = ???
