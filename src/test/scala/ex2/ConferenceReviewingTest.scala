@@ -4,7 +4,7 @@ import org.junit.*
 import org.junit.Assert.*
 
 class ConferenceReviewingTest:
-  val conference: ConferenceReviewing = ConferenceReviewing.apply()
+  val conference: ConferenceReviewing = ConferenceReviewing()
   conference.loadReview(1, 8, 8, 6, 8)
   conference.loadReview(1, 9, 9, 6, 9)
   conference.loadReview(2, 9, 9, 10, 9)
@@ -13,7 +13,7 @@ class ConferenceReviewingTest:
   conference.loadReview(3, 4, 4, 4, 4)
   conference.loadReview(4, 6, 6, 6, 6)
   conference.loadReview(4, 7, 7, 8, 7)
-  import ex2.Question.*
+  import Question.*
   val map: Map[Question, Int] = Map(Relevance -> 8, Significance -> 8, Confidence -> 7, Final -> 8)
   conference.loadReview(4, map)
   conference.loadReview(5, 6, 6, 6, 10)
@@ -44,5 +44,3 @@ class ConferenceReviewingTest:
     assertEquals(conference.averageWeightedFinalScoreMap()(3), (0.9+1.6)/2, 0.01)
     assertEquals(conference.averageWeightedFinalScoreMap()(4), (3.6+5.6+5.6)/3, 0.01)
     assertEquals(conference.averageWeightedFinalScoreMap()(5), (6.0+7.0)/2, 0.01)
-
-
