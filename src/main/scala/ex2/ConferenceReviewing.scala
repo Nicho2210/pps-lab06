@@ -40,7 +40,15 @@ object ConferenceReviewing:
 
     override def acceptedArticles(): Predef.Set[Int] =
       _reviews.filter((a, _) => averageFinalScore(a) > 5).filter((_, m) => m(Relevance) >= 8).map((a, _) => a).toSet
-    
-    override def sortedAcceptedArticles(): List[(Int, Double)] = ???
 
-    override def averageWeightedFinalScoreMap(): Predef.Map[Int, Double] = ???
+    override def sortedAcceptedArticles(): List[(Int, Double)] =
+      acceptedArticles().map(a => (a, averageFinalScore(a))).toList.sortBy(_._2)
+      
+    private def averageWeightedFinalScoreMap(article: Int): Double =
+      val s = _reviews.collect{ case (a, m) if a == article => (m(Confidence).toDouble * m(Final).toDouble)/10.0 }
+      val l = s.length
+      s.sum / l
+      
+
+    override def averageWeightedFinalScoreMap(): Predef.Map[Int, Double] =
+      _reviews.map((a, m) => a).toSet.map(a => (a, averageWeightedFinalScoreMap(a))).toMap
